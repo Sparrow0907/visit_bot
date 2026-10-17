@@ -6,6 +6,7 @@ from redis.asyncio import Redis # ассинхронная версия
 import os
 from contextlib import asynccontextmanager
 from config import settings
+from handlers import menu, info, booking
 
 load_dotenv()
 BOT_TOKEN = settings.bot_token
@@ -19,6 +20,10 @@ redis = Redis(host=REDIS_HOST, port=REDIS_PORT, db=0, password=REDIS_PASSWORD)
 storage = RedisStorage(redis=redis)
 
 dp = Dispatcher(storage=storage)
+
+dp.include_router(menu.router)
+dp.include_router(info.router)
+dp.include_router(booking.router)
 
 
 async def lifespan(app):
